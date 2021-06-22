@@ -50,7 +50,7 @@
 
             <div class="col-6">
                 <label for="">N° Documento</label>
-                <input class="form-control" type="number" required="" placeholder="N° Documento" wire:model.debounce.500ms="afcodigo">
+                <input class="form-control" type="number" required="" placeholder="N° Documento" wire:model.debounce.200ms="afcodigo">
                 @error('afcodigo') <span class="text-danger error">{{ $message }}</span>@enderror
             </div>
         </div>

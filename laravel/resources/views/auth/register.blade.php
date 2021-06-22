@@ -6,26 +6,35 @@
         @livewireStyles
         <title>REGISTRO DE DATOS </title>
     </head>
-    <body class="fixed-left">
-
+    <body class="">
+        <div class="topbar">
+            <br>
+            <nav class="navbar-custom bg-info"               
+                <a>
+                    <center>
+                        <img src="{{ asset('theme/assets/images/f3.png') }}" alt="">
+                        <h2 style="color: white"><b>AGENDAMIENTOS DE CITAS</b></h2>
+                    </center>
+                </a>
+               
+               
+        
+            </nav>
+        
+        </div>
         <!-- Begin page -->
         <div class="wrapper-page2">
 
             <div class="card" style="width: 100%">
-                <div class="card-header">
-                    <h4>REGISTRO DE DATOS</h4>
+                <div class="card-header card-info">
+                    <h4 style="color: white">REGISTRO DE DATOS</h4>
                 </div>
                 <div class="card-body">
                     <h3 class="text-center mt-0 m-b-15">
                         <a href="index.html" class="logo logo-admin">
 
                         </a>
-                    </h3>
-                    <center>
-                        <img src="{{ asset('theme/assets/images/f3.png') }}" alt="">
-                        <h2><b>AGENDAMIENTO DE CITAS</b></h2>
-
-                    </center>
+                    </h3>                
                     <div class="p-3" >
                         <livewire:register />
                     </div>
