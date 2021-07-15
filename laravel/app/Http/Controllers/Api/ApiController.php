@@ -153,9 +153,11 @@ class ApiController extends Controller
     public function getCitas(Request $request)
     {
         //return $request;
+        if(!empty($request->fecha1) && !empty($request->fecha2)){
+            $data = Cita::getCitasFilter($request->fecha1, $request->fecha2);
+            return response()->json($data);
+        }
 
-        $data = Cita::getCitasFilter($request->fecha1, $request->fecha2);
-        return response()->json($data);
     }
 
     public function estadoCita(Request $request)

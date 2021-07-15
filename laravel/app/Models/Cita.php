@@ -33,7 +33,10 @@ class Cita extends Model
         ->join('citasservicios as cs', 'c.rips', '=', 'cs.rips')
         ->join('medicos as m', 'm.codigo', '=', 'c.medico')
         ->join('users as u', 'c.paciente', '=', 'u.afcodigo')
-        ->select('u.codeps', 'u.tipidafil', 'u.afcodigo', 'u.afape1', 'u.afape2', 'u.afnom1', 'u.afnom2', 'u.fecha_nacimiento', 'u.sexo', 'u.email', 'u.telefono', 'u.direccion', 'm.nombre as medico', 'c.fechaCita', 'c.horaCita','cs.descripcion', 'c.id', 'm.codigo as medico_id', 'cs.codigo')
+        ->select('u.codeps', 'u.tipidafil', 'u.afcodigo', 'u.afape1', 'u.afape2', 'u.afnom1', 'u.afnom2',
+        'u.fecha_nacimiento', 'u.sexo', 'u.email', 'u.telefono', 'u.direccion',
+         'm.nombre as medico', 'c.fechaCita', 'c.horaCita','cs.descripcion',
+         'c.id', 'm.codigo as medico_id', 'cs.codigo', 'c.created_at as fecha')
         ->whereBetween('c.fechaCita', [$fecha1, $fecha2])
         ->where('c.estado', 1)
         ->get();
