@@ -89,13 +89,22 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-12">
+            <div class="col-6">
                 <label for="">EPS</label>
                 <select class="form-control" wire:model="codeps">
                     <option value="">SELECCIONE</option>
                     @foreach ($epss as $item)
                         <option value="{{ $item->codeps }}">{{ $item->nombre }}</option>
                     @endforeach
+                </select>
+            </div>
+            <div class="col-6">
+                <label for="">Regimén</label>
+                <select class="form-control" wire:model="regimen">
+                    <option value="">SELECCIONE</option>
+                    <option value="S">SUBSIDIADO</option>
+                    <option value="C">CONTRIBUTIVO</option>
+                    @error('regimen') <span class="text-danger error">{{ $message }}</span>@enderror
                 </select>
             </div>
         </div>

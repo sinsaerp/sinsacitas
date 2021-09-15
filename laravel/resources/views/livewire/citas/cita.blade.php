@@ -28,7 +28,7 @@ use Carbon\Carbon;
                     <select class="form-control" wire:model="tipo">
                         <option value="">SELECCIONE</option>
                         @foreach ($tipos as $item)
-                            <option value="{{ $item->nombre }}">{{ $item->nombre }}</option>
+                            <option value="{{ $item->id }}">{{ $item->nombre }}</option>
                         @endforeach
                     </select>
 
@@ -47,7 +47,7 @@ use Carbon\Carbon;
             </div>
         </div>
     </div>
-    
+
    @if(count($horarios)>0)
 
    <div class="card m-b-30 m-t-10">
@@ -67,25 +67,33 @@ use Carbon\Carbon;
                         </div>
                     </td>
                 </tr>
+            </table>
                 @if(count($horas)>0)
+                <table>
+                <tr>
+                    <td colspan="3"></td>
                 @foreach ($horas as $item)
                 @if($loop->iteration==$seleccion)
-                <tr class="table-success">
-                    <td>
+
+                    <td >
                         <button class="btn btn-danger" wire:click="select({{ $loop->iteration }}, {{ $item->id }})"> {{ Carbon::parse($item->hora)->format('h:i A') }}</button></a>
                     </td>
-                   </tr>
                 @else
-                <tr>
-                    <td>
-                        <button class="btn btn-primary" wire:click="select({{ $loop->iteration }}, {{ $item->id }})"> {{ Carbon::parse($item->hora)->format('h:i A') }}</button></a>
-                    </td>
-                </tr>
+
+                        <td>
+                            <button class="btn btn-primary" wire:click="select({{ $loop->iteration }}, {{ $item->id }})"> {{ Carbon::parse($item->hora)->format('h:i A') }}</button></a>
+                        </td>
+
+
+
                 @endif
                 @endforeach
+            </tr>
+        </table>
                @endif
 
-            </table>
+
+
 
         </div>
 
@@ -104,13 +112,18 @@ use Carbon\Carbon;
                 </div>
 
                @if(!empty($especialidad) && !empty($tipo) && !empty($medico) && !empty($seleccion))
-               <div class="col-md-12 m-t-15">
+               <div class="col-md-6 m-t-15">
                 <center>
                     <button data-toggle="modal" data-target="#detallesModal"   class="btn btn-success">RESERVAR CITA</button>
                 </center>
             </div>
 
                @endif
+               <div class="col-md-6 m-t-15">
+                <center>
+                    <a href="{{ route('citas') }}" class="btn btn-danger">CANCELAR</a>
+                </center>
+            </div>
 
             </div>
 

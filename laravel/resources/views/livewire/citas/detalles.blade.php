@@ -28,7 +28,7 @@ use Carbon\Carbon;
                     </tr>
                     <tr>
                         <th>EPS: </th>
-                        <td>{{ $user->eps }}</td>
+                        <td>{{ $nombreEps }}</td>
                     </tr>
                     <tr>
                         <th>TELEFONO: </th>
@@ -48,7 +48,7 @@ use Carbon\Carbon;
                     </tr>
                    <tr>
                        <th>TIPO CONSULTA</th>
-                       <td>{{ $tipo }}</td>
+                       <td>{{ $nombreConsulta }}</td>
                    </tr>
                    <tr>
                     <th>ESPECIALIDAD</th>

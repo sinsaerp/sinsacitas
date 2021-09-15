@@ -4,10 +4,12 @@ namespace App\Http\Livewire;
 
 use App\Models\Cita as ModelsCita;
 use App\Models\CitaServicio;
+use App\Models\Epssi;
 use App\Models\Especialidad;
 use App\Models\Horario;
 use App\Models\Medico;
 use App\Models\TipoConsulta;
+use App\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -19,14 +21,15 @@ class Cita extends Component
     public $especialidad, $especialidad_id, $nespecialidad,
      $nmedico, $medico, $medico_id, $tipo, $seleccion='', $horario, $user, $autorizacion, $fecha, $fechaFormato;
     public $horas=[];
-    public $horarios=[], $tipos=[], $medicos=[], $especialidades=[];
+    public $horarios=[], $tipos=[], $medicos=[], $especialidades=[], $nombreEps, $nombreConsulta, $codConsulta;
     protected $listeners = ['say-hello' => 'sayHello'];
 
     public function render()
     {
         $fechas=array();
-        
+
         $this->user=Auth::user();
+        $this->nombreEps=Epssi::getNombre($this->user->codeps);
         if(!empty($this->especialidad)){
         $part = explode("-", $this->especialidad);
         $this->especialidad_id=$part[0];
@@ -45,11 +48,11 @@ class Cita extends Component
         }
 
         if($this->especialidad && $this->tipo){
-            $this->medicos=Medico::getByEspecialidad($this->especialidad_id);            
+            $this->medicos=Medico::getByEspecialidad($this->especialidad_id);
         }
         if($this->medico){
             $this->horarios=Horario::getHorarioFecha($this->medico_id);
-                    
+
             foreach($this->horarios as $horario){
                 array_push($fechas, Carbon::parse($horario->fecha)->format('d-m-Y'));
             }
@@ -57,11 +60,13 @@ class Cita extends Component
        if(empty($this->fecha)){
         $this->emit('fecha', $fechas);
        }
-        if(!empty($this->fecha)){
-            setlocale(LC_ALL,"es_ES");
-            $this->fechaFormato='';
-        }
-       
+       if(!empty($this->tipo)){
+            $consulta=TipoConsulta::find($this->tipo);
+            $this->nombreConsulta=$consulta->nombre;
+            $this->codConsulta=$consulta->codigo;
+       }
+
+
         return view('livewire.citas.cita');
     }
 
@@ -84,6 +89,10 @@ class Cita extends Component
         }else{
             $this->seleccion=$id;
             $this->horario=$horario;
+            $hor=Horario::find($this->horario);
+            Carbon::setLocale('es');
+            $this->fechaFormato = Carbon::parse($hor->fecha)->toFormattedDateString();
+           //esto se mostrará en español
         }
 
     }
@@ -94,6 +103,8 @@ class Cita extends Component
         $this->medico = '';
         $this->tipo = '';
         $this->seleccion = '';
+        $this->nombreConsulta = '';
+        $this->codConsulta = '';
         $this->horario = '';
         $this->user = '';
         $this->autorizacion = '';
@@ -102,6 +113,11 @@ class Cita extends Component
         $this->especialidad_id = '';
         $this->nespecialidad= '';
         $this->fechaFormato= '';
+        $this->horas=[];
+        $this->horarios=[];
+         $this->tipos=[];
+          $this->medicos=[];
+          $this->especialidades=[];
     }
 
      public function store()
@@ -117,10 +133,11 @@ class Cita extends Component
         try{
 
             DB::beginTransaction();
+
             $hor=Horario::find($this->horario);
             $obj=new ModelsCita();
             $obj->paciente=$this->user->afcodigo;
-            $obj->rips=random_int(1,100);
+            $obj->rips=User::obtenerRips();
             $obj->medico=$this->medico_id;
             $obj->fecha=Carbon::now()->format('Y-m-d');
             $obj->fechaDeseada=Carbon::now()->format('Y-m-d');
@@ -132,8 +149,8 @@ class Cita extends Component
             $obj->save();
             CitaServicio::create([
                 'rips'=>$obj->rips,
-                'codigo'=>random_int(1,100),
-                'descripcion'=>$this->nespecialidad.'-'.$this->tipo,
+                'codigo'=>$this->codConsulta,
+                'descripcion'=>$this->nespecialidad.'-'.$this->nombreConsulta,
                 'cantidad'=>1,
             ]);
             $hor->estado=0;

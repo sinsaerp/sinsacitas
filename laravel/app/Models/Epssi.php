@@ -27,6 +27,11 @@ class Epssi extends Model
         return Epssi::where('estado', 1)->get();
     }
 
+    public static function getNombre($eps)
+    {
+        return Epssi::where('codeps', $eps)->first()->nombre;
+    }
+
 
 
 }

@@ -11,7 +11,7 @@ use Livewire\Component;
 class Register extends Component
 {
     public $afape1, $afape2, $afnom1, $afnom2, $afcodigo, $codeps, $tipidafil, $fecha_nacimiento, $sexo, $direccion, $telefono;
-    public $email, $password, $password2;
+    public $email, $password, $password2, $regimen;
     public $model=User::class;
     public function render()
     {
@@ -21,7 +21,7 @@ class Register extends Component
            $data=User::validarDuplicado($this->afcodigo, $this->tipidafil);
            if(count($data)>0){
              session()->flash('warning', 'YA EXISTE UN USUARIO CON EL NÚMERO DE IDENTIFICACION INGRESADO.');
-        }      
+        }
 
         }
         if(!empty($this->fecha_nacimiento))
@@ -40,6 +40,7 @@ class Register extends Component
         $this->afnom1 = '';
         $this->afnom2 = '';
         $this->afcodigo = '';
+        $this->regimen = '';
         $this->codeps = '';
         $this->tipidafil = '';
         $this->fecha_nacimiento = '';
@@ -64,6 +65,9 @@ class Register extends Component
             'password2' => 'required|min:5',
             'password' => 'required|min:5',
             'sexo' => 'required',
+            'telefono' => 'required',
+            'direccion' => 'required',
+            'regimen' => 'required',
             'codeps' => 'required',
         ]);
         if($this->password!=$this->password2){
@@ -80,8 +84,9 @@ class Register extends Component
             $obj->fecha_nacimiento =         $this->fecha_nacimiento ;
             $obj->sexo =         $this->sexo ;
             $obj->direccion =         strtoupper($this->direccion) ;
+            $obj->regimen =         strtoupper($this->regimen) ;
             $obj->telefono =         $this->telefono ;
-            $obj->email =         strtoupper($this->email) ;
+            $obj->email =         strtolower($this->email) ;
             $obj->password =         Hash::make($this->password) ;
             $obj->save();
 

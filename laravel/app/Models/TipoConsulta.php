@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TipoConsulta extends Model
 {
     protected $table="tipoconsulta";
-    protected $fillable =['id','nombre', 'descripcion', 'especialidad_id', 'estado'];
+    protected $fillable =['id','nombre', 'codigo', 'descripcion', 'especialidad_id', 'estado'];
 
     public static function search($search)
     {

@@ -128,17 +128,18 @@ class ApiController extends Controller
     public function setTipoConsultas(Request $request)
     {
 
-        if(empty($request->codigo) || empty($request->nombre)){
+        if(empty($request->codigo) || empty($request->nombre) || empty($request->codigo2)){
             return response()->json(['status' => 'Datos en blanco']);
         }
                 $data = TipoConsulta::updateOrCreate(
                     [
                         'especialidad_id' => $request->codigo,
-                        'nombre' => $request->nombre,
+                        'codigo' => $request->codigo,
                     ],
                     [
                         'especialidad_id' => $request->codigo,
                         'nombre' => $request->nombre,
+                        'codigo' => $request->codigo2,
                     ]
                 );
 
@@ -163,9 +164,20 @@ class ApiController extends Controller
     public function estadoCita(Request $request)
     {
         if(!empty($request->id)){
-            $data = Cita::find($request->id);
+            $params=[];
+            $data=Cita::find($request->id);
+            $obj = Cita::getCitaServicios($request->id);
             if($request->estado==0){
                 $data->estado=0;
+                $params=[
+                    'servicio'=>$obj->descripcion,
+                    'medico'=>$obj->medico,
+                    'fecha'=>$obj->fechaCita,
+                    'hora'=>$obj->horaCita,
+                    'telefono'=>$obj->telefono,
+                ];
+                Cita::envioApi($params);
+
             }else{
                 $data->estado=2;
             }
@@ -179,5 +191,7 @@ class ApiController extends Controller
         }else{
             return response()->json(['status' => 'Datos en blanco']);
         }
+
+
     }
 }

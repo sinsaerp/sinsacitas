@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -17,7 +18,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'codeps', 'tipidafil', 'afcodigo', 'afape1', 'afape2', 'afnom1',
-        'afnom2', 'fecha_nacimiento', 'sexo', 'telefono', 'direccion', 'email', 'password',
+        'afnom2', 'fecha_nacimiento', 'sexo', 'telefono', 'direccion', 'regimen', 'email', 'password',
     ];
 
     /**
@@ -66,6 +67,10 @@ class User extends Authenticatable
     public static function validarDuplicado($codigo, $tipo){
         return User::where('afcodigo', $codigo)->where('tipidafil',$tipo)->where('estado',1)->get();
 
+    }
+
+    public static function obtenerRips(){
+        return DB::table('users')->max('id')+1;
     }
 
 
